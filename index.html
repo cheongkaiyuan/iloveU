@@ -136,7 +136,24 @@
   </style>
 </head>
 <body>
+<!-- 放在你网页合适的位置显示 -->
+<p id="love-days" style="font-size: 20px; color: deeppink; margin-top: 10px;">
+  ❤️ 我们相识的第 <span id="daysCount"></span> 天
+</p>
 
+<script>
+  // 设置你们的相识日期
+  const startDate = new Date("2025-03-16"); // ←←← 改成你们的纪念日
+
+  function updateLoveDays() {
+    const today = new Date();
+    const diffTime = today - startDate;
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    document.getElementById("daysCount").textContent = diffDays;
+  }
+
+  updateLoveDays();
+</script>
   <!-- 隐藏的 YouTube 音乐播放器 -->
 <iframe
   width="0"
@@ -195,6 +212,80 @@
       tapHint.style.display = 'none';
     }, { once: true });
   </script>
+<script>
+  const heartFall = setInterval(() => {
+    const heart = document.createElement('div');
+    heart.className = 'heart';
+    heart.style.left = Math.random() * 100 + 'vw';
+    heart.style.animationDuration = 3 + Math.random() * 2 + 's';
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 5000);
+  }, 300);
+
+  const style = document.createElement('style');
+  style.textContent = `
+    .heart {
+      width: 20px;
+      height: 20px;
+      position: fixed;
+      top: -30px;
+      font-size: 20px;
+      color: pink;
+      animation: fall linear;
+      z-index: 1000;
+    }
+    @keyframes fall {
+      to {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+</script>
+<!-- 柔光滤镜（全局） -->
+<style>
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    backdrop-filter: blur(3px) brightness(1.1);
+    pointer-events: none;
+    z-index: 0;
+  }
+</style>
+
+<!-- 鼠标拖尾星星特效 -->
+<script>
+  document.addEventListener("mousemove", function(e) {
+    const star = document.createElement("div");
+    star.className = "star";
+    star.style.left = e.pageX + "px";
+    star.style.top = e.pageY + "px";
+    document.body.appendChild(star);
+    setTimeout(() => star.remove(), 1000);
+  });
+
+  const style2 = document.createElement("style");
+  style2.textContent = `
+    .star {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: gold;
+      box-shadow: 0 0 10px gold, 0 0 20px pink;
+      animation: sparkle 1s linear;
+      z-index: 9999;
+      pointer-events: none;
+    }
+    @keyframes sparkle {
+      0% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(2); }
+    }
+  `;
+  document.head.appendChild(style2);
+</script>
 
 </body>
 </html>
