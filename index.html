@@ -173,62 +173,8 @@
   <p>见不到的日子都想把存满满的爱留在下次给你，爱你哟！</p>
 
   <div class="btn-group">
-   <button id="button1" onclick="button1Click()">想</button>
-<button id="button2" onclick="button2Click()">不想</button>
-
-<script>
-  let button1Size = 1; // 按钮1的初始大小比例
-  let clickedButton2 = false; // 用来追踪按键2是否点击过
-
-  // 按键1点击事件：显示爱心泡泡
-  function button1Click() {
-    // 这里是按键1点击时的动画效果，比如爱心泡泡
-    const heart = document.createElement('div');
-    heart.className = 'heart';
-    heart.style.left = Math.random() * 100 + 'vw';
-    heart.style.animationDuration = 3 + Math.random() * 2 + 's';
-    document.body.appendChild(heart);
-    setTimeout(() => heart.remove(), 5000);
-  }
-
-  // 按键2点击事件：按键1增加1cm
-  function button2Click() {
-    if (!clickedButton2) {
-      // 只在第一次点击按键2时增加大小
-      button1Size += 0.01; // 每次点击，按钮1增大1cm（0.01倍）
-      document.getElementById("button1").style.transform = `scale(${button1Size})`;
-      clickedButton2 = true; // 标记按键2已经被点击过
-    }
-  }
-</script>
-
-<style>
-  button {
-    font-size: 20px;
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: transform 0.3s ease; /* 按钮变大时加上平滑动画 */
-  }
-
-  .heart {
-    width: 20px;
-    height: 20px;
-    position: fixed;
-    top: -30px;
-    font-size: 20px;
-    color: pink;
-    animation: fall linear;
-    z-index: 1000;
-  }
-
-  @keyframes fall {
-    to {
-      transform: translateY(100vh) rotate(360deg);
-      opacity: 0;
-    }
-  }
-</style>
-
+    <button id="yesBtn">很想哟~ 💗</button>
+    <button id="noBtn">不想lorrr 🙃</button>
   </div>
 
   <footer>Created by Nicole ✨</footer>
