@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
   <meta charset="UTF-8">
-  <title>叮！给你的一封小情书 💌</title>
+  <title>给你的一封小情书 💌</title>
   <style>
     body {
       margin: 0;
@@ -14,6 +14,7 @@
       align-items: center;
       text-align: center;
       min-height: 100vh;
+      position: relative;
     }
 
     h1 {
@@ -113,6 +114,22 @@
       color: #999;
     }
 
+    #tapHint {
+      position: absolute;
+      top: 10px;
+      font-size: 14px;
+      color: #aaa;
+      background: rgba(255, 255, 255, 0.5);
+      padding: 5px 10px;
+      border-radius: 10px;
+      animation: blink 1.5s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
     audio {
       display: none;
     }
@@ -120,27 +137,31 @@
 </head>
 <body>
 
-  <!-- 背景音乐 -->
-  <audio autoplay loop>
+  <!-- 🎵 背景音乐 -->
+  <audio id="bgm" loop>
     <source src="https://cdn.pixabay.com/audio/2022/03/24/audio_19a4205728.mp3" type="audio/mp3">
   </audio>
 
-  <h1>叮！给你的一封小情书 💌</h1>
+  <div id="tapHint">点一下画面，音乐就开始啦 🎵</div>
+
+  <h1>给你的一封小情书 💌</h1>
 
   <img src="love.jpg" alt="我们的照片">
 
-  <p>见不到的日子我想把存满满的爱留到下次见面给你，爱你哟！</p>
+  <p>见不到的日子都想把存满满的爱都给你，爱你哟！</p>
 
   <div class="btn-group">
-    <button id="yesBtn">超级想 💗</button>
-    <button id="noBtn">不想lor 🙃</button>
+    <button id="yesBtn">想 💗</button>
+    <button id="noBtn">不想 🙃</button>
   </div>
 
-  <footer>Created by Nicole ✨</footer>
+  <footer>Designed with love ✨</footer>
 
   <script>
     const yesBtn = document.getElementById('yesBtn');
     const noBtn = document.getElementById('noBtn');
+    const bgm = document.getElementById('bgm');
+    const tapHint = document.getElementById('tapHint');
 
     yesBtn.addEventListener('click', () => {
       for (let i = 0; i < 30; i++) {
@@ -162,6 +183,12 @@
       const colors = ['#e91e63', '#f06292', '#f8bbd0', '#ec407a', '#f50057'];
       return colors[Math.floor(Math.random() * colors.length)];
     }
+
+    // 点击任意处播放音乐
+    window.addEventListener('click', () => {
+      bgm.play();
+      tapHint.style.display = 'none';
+    }, { once: true });
   </script>
 
 </body>
