@@ -103,11 +103,6 @@
       }
     }
 
-    @keyframes grow {
-      0% { transform: scale(1); }
-      100% { transform: scale(5); }
-    }
-
     footer {
       margin-top: 60px;
       font-size: 14px;
@@ -137,8 +132,9 @@
 </head>
 <body>
 
-  <!-- 隐藏的 YouTube 音乐播放器 -->
+<!-- 隐藏的 YouTube 音乐播放器 -->
 <iframe
+  id="bgm"
   width="0"
   height="0"
   src="https://www.youtube.com/embed/kek3bM7yswQ?autoplay=1&loop=1&playlist=kek3bM7yswQ"
@@ -147,71 +143,74 @@
   allowfullscreen>
 </iframe>
 
-  <div id="tapHint">点一下画面，音乐就开始啦 🎵</div>
+<div id="tapHint">点一下画面，音乐就开始啦 🎵</div>
 
-  <h1>叮！给你的一封小情书 💌</h1>
+<h1>叮！给你的一封小情书 💌</h1>
 
-  <img src="love.jpg" alt="我们的照片">
-<!-- 放在你网页合适的位置显示 -->
+<img src="love.jpg" alt="我们的照片">
+
 <p id="love-days" style="font-size: 20px; color: deeppink; margin-top: 10px;">
   ❤️ 我们相爱的第 <span id="daysCount"></span> 天！
 </p>
 
 <script>
-  // 设置你们的相识日期
-  const startDate = new Date("2025-03-16"); // ←←← 改成你们的纪念日
-
+  const startDate = new Date("2025-03-16");
   function updateLoveDays() {
     const today = new Date();
     const diffTime = today - startDate;
     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
     document.getElementById("daysCount").textContent = diffDays;
   }
-
   updateLoveDays();
 </script>
-  <p>见不到的日子都想把存满满的爱留在下次给你，爱你哟！</p>
 
-  <div class="btn-group">
-    <button id="yesBtn">很想哟~ 💗</button>
-    <button id="noBtn">不想lorrr 🙃</button>
-  </div>
+<p>见不到的日子都想把存满满的爱留在下次给你，爱你哟！</p>
 
-  <footer>Created by Nicole ✨</footer>
+<div class="btn-group">
+  <button id="yesBtn">很想哟~ 💗</button>
+  <button id="noBtn">不想lorrr 🙃</button>
+</div>
 
-  <script>
-    const yesBtn = document.getElementById('yesBtn');
-    const noBtn = document.getElementById('noBtn');
-    const bgm = document.getElementById('bgm');
-    const tapHint = document.getElementById('tapHint');
+<footer>Created by Nicole ✨</footer>
 
-    yesBtn.addEventListener('click', () => {
-      for (let i = 0; i < 30; i++) {
-        const heart = document.createElement('div');
-        heart.classList.add('heart');
-        heart.style.left = Math.random() * window.innerWidth + 'px';
-        heart.style.top = Math.random() * window.innerHeight + 'px';
-        heart.style.background = randomHeartColor();
-        document.body.appendChild(heart);
-        setTimeout(() => heart.remove(), 3000);
-      }
-    });
+<script>
+  const yesBtn = document.getElementById('yesBtn');
+  const noBtn = document.getElementById('noBtn');
+  const tapHint = document.getElementById('tapHint');
+  let hasGrown = false;
+  let currentScale = 1;
 
-    noBtn.addEventListener('click', () => {
-      yesBtn.style.animation = 'grow 2s infinite alternate';
-    });
-
-    function randomHeartColor() {
-      const colors = ['#e91e63', '#f06292', '#f8bbd0', '#ec407a', '#f50057'];
-      return colors[Math.floor(Math.random() * colors.length)];
+  yesBtn.addEventListener('click', () => {
+    for (let i = 0; i < 30; i++) {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.style.left = Math.random() * window.innerWidth + 'px';
+      heart.style.top = Math.random() * window.innerHeight + 'px';
+      heart.style.background = randomHeartColor();
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 3000);
     }
+  });
 
-    // 点击任意处播放音乐
-    window.addEventListener('click', () => {
-      bgm.play();
-      tapHint.style.display = 'none';
-    }, { once: true });
-  </script>
+  noBtn.addEventListener('click', () => {
+    if (!hasGrown) {
+      currentScale += 0.35;
+      yesBtn.style.transform = `scale(${currentScale})`;
+      hasGrown = true;
+    }
+  });
+
+  function randomHeartColor() {
+    const colors = ['#e91e63', '#f06292', '#f8bbd0', '#ec407a', '#f50057'];
+    return colors[Math.floor(Math.random() * colors.length)];
+  }
+
+  window.addEventListener('click', () => {
+    tapHint.style.display = 'none';
+  }, { once: true });
+</script>
+
+<!-- 漂落爱心动画 -->
 <script>
   const heartFall = setInterval(() => {
     const heart = document.createElement('div');
@@ -243,7 +242,8 @@
   `;
   document.head.appendChild(style);
 </script>
-<!-- 柔光滤镜（全局） -->
+
+<!-- 柔光滤镜 -->
 <style>
   body::before {
     content: '';
