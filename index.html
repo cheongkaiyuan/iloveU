@@ -125,34 +125,65 @@
       50% { opacity: 0.3; }
     }
 
-    audio {
-      display: none;
+    /* 爆炸粒子 - 亲吻标志 💋 */
+    .kiss {
+      position: fixed;
+      font-size: 24px;
+      animation: kissExplode 1s ease-out forwards;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    @keyframes kissExplode {
+      from {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+      }
+      to {
+        transform: translate(var(--x), var(--y)) scale(0.8);
+        opacity: 0;
+      }
+    }
+
+    /* 鼠标星星拖尾 */
+    .star {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: gold;
+      box-shadow: 0 0 10px gold, 0 0 20px pink;
+      animation: sparkle 1s linear;
+      z-index: 9999;
+      pointer-events: none;
+    }
+
+    @keyframes sparkle {
+      0% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(2); }
+    }
+
+    /* 柔光滤镜 */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      backdrop-filter: brightness(1.05);
+      pointer-events: none;
+      z-index: 0;
     }
   </style>
 </head>
 <body>
 
-  <!-- 隐藏的 YouTube 音乐播放器 -->
-  <iframe
-    id="bgm"
-    width="0"
-    height="0"
-    src="https://www.youtube.com/embed/kek3bM7yswQ?autoplay=1&loop=1&playlist=kek3bM7yswQ"
-    frameborder="0"
-    allow="autoplay"
-    allowfullscreen>
-  </iframe>
-
+  <!-- 背景音乐播放器 -->
+  <iframe width="0" height="0" src="https://www.youtube.com/embed/kek3bM7yswQ?autoplay=1&loop=1&playlist=kek3bM7yswQ" frameborder="0" allow="autoplay" allowfullscreen></iframe>
   <div id="tapHint">点一下画面，音乐就开始啦 🎵</div>
 
   <h1>叮！给你的一封小情书 💌</h1>
-
   <img src="love.jpg" alt="我们的照片">
 
-  <p id="love-days" style="font-size: 20px; color: deeppink; margin-top: 10px;">
-    ❤️ 我们相爱的第 <span id="daysCount"></span> 天！
-  </p>
-
+ <p id="love-days" style="font-size: 50px; font-weight: bold;">❤️ 我们相爱的第 <span id="daysCount"></span> 天！</p>
   <p>见不到的日子都想把存满满的爱留在下次给你，爱你哟！</p>
 
   <div class="btn-group">
@@ -162,9 +193,9 @@
 
   <footer>Created by Nicole ✨</footer>
 
+  <!-- JS 部分 -->
   <script>
-    // 设置纪念日
-    const startDate = new Date("2025-03-16");
+    const startDate = new Date("2025-03-16"); // 纪念日
     function updateLoveDays() {
       const today = new Date();
       const diffTime = today - startDate;
@@ -172,17 +203,17 @@
       document.getElementById("daysCount").textContent = diffDays;
     }
     updateLoveDays();
+  </script>
 
-    // 主要按钮功能
+  <script>
     const yesBtn = document.getElementById('yesBtn');
     const noBtn = document.getElementById('noBtn');
     const tapHint = document.getElementById('tapHint');
+    let buttonSize = 1;
 
-    let currentScale = 1; // 初始按钮大小
-
-    // 点击「很想哟~ 💗」按钮：生成爱心
     yesBtn.addEventListener('click', () => {
-      for (let i = 0; i < 30; i++) {
+      createKissExplosion(yesBtn);
+      for (let i = 0; i < 20; i++) {
         const heart = document.createElement('div');
         heart.classList.add('heart');
         heart.style.left = Math.random() * window.innerWidth + 'px';
@@ -193,77 +224,36 @@
       }
     });
 
-    // 点击「不想lorrr 🙃」按钮：「很想哟~ 💗」持续变大 1cm（scale约+0.38）
     noBtn.addEventListener('click', () => {
-      const oneCmToScale = 0.38;
-      currentScale += oneCmToScale;
-      yesBtn.style.transform = `scale(${currentScale})`;
-      yesBtn.style.transition = 'transform 0.3s ease';
+      buttonSize += 0.26; // 1cm ≈ 26px
+      yesBtn.style.transform = `scale(${buttonSize})`;
     });
 
-    // 爱心颜色随机
+    function createKissExplosion(element) {
+      const rect = element.getBoundingClientRect();
+      for (let i = 0; i < 20; i++) {
+        const kiss = document.createElement('div');
+        kiss.className = 'kiss';
+        kiss.innerText = '💋';
+        kiss.style.left = rect.left + rect.width / 2 + 'px';
+        kiss.style.top = rect.top + rect.height / 2 + 'px';
+        kiss.style.setProperty('--x', (Math.random() - 0.5) * 400 + 'px');
+        kiss.style.setProperty('--y', (Math.random() - 0.5) * 400 + 'px');
+        document.body.appendChild(kiss);
+        setTimeout(() => kiss.remove(), 1000);
+      }
+    }
+
     function randomHeartColor() {
       const colors = ['#e91e63', '#f06292', '#f8bbd0', '#ec407a', '#f50057'];
       return colors[Math.floor(Math.random() * colors.length)];
     }
 
-    // 点击任意处播放音乐
     window.addEventListener('click', () => {
-      const bgm = document.getElementById('bgm');
-      if (bgm) {
-        bgm.play();
-      }
       tapHint.style.display = 'none';
     }, { once: true });
-  </script>
 
-  <!-- 落下的心动画 -->
-  <script>
-    const heartFall = setInterval(() => {
-      const heart = document.createElement('div');
-      heart.className = 'heart';
-      heart.style.left = Math.random() * 100 + 'vw';
-      heart.style.animationDuration = 3 + Math.random() * 2 + 's';
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 5000);
-    }, 300);
-
-    const style = document.createElement('style');
-    style.textContent = `
-      .heart {
-        width: 20px;
-        height: 20px;
-        position: fixed;
-        top: -30px;
-        font-size: 20px;
-        color: pink;
-        animation: fall linear;
-        z-index: 1000;
-      }
-      @keyframes fall {
-        to {
-          transform: translateY(100vh) rotate(360deg);
-          opacity: 0;
-        }
-      }
-    `;
-    document.head.appendChild(style);
-  </script>
-
-  <!-- 柔光滤镜 -->
-  <style>
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      backdrop-filter: brightness(1.05);
-      pointer-events: none;
-      z-index: 0;
-    }
-  </style>
-
-  <!-- 鼠标拖尾星星特效 -->
-  <script>
+    // 鼠标拖尾星星特效
     document.addEventListener("mousemove", function(e) {
       const star = document.createElement("div");
       star.className = "star";
@@ -272,28 +262,7 @@
       document.body.appendChild(star);
       setTimeout(() => star.remove(), 1000);
     });
-
-    const style2 = document.createElement("style");
-    style2.textContent = `
-      .star {
-        position: absolute;
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: gold;
-        box-shadow: 0 0 10px gold, 0 0 20px pink;
-        animation: sparkle 1s linear;
-        z-index: 9999;
-        pointer-events: none;
-      }
-      @keyframes sparkle {
-        0% { opacity: 1; transform: scale(1); }
-        100% { opacity: 0; transform: scale(2); }
-      }
-    `;
-    document.head.appendChild(style2);
   </script>
 
 </body>
 </html>
-
