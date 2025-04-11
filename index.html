@@ -132,160 +132,168 @@
 </head>
 <body>
 
-<!-- 隐藏的 YouTube 音乐播放器 -->
-<iframe
-  id="bgm"
-  width="0"
-  height="0"
-  src="https://www.youtube.com/embed/kek3bM7yswQ?autoplay=1&loop=1&playlist=kek3bM7yswQ"
-  frameborder="0"
-  allow="autoplay"
-  allowfullscreen>
-</iframe>
+  <!-- 隐藏的 YouTube 音乐播放器 -->
+  <iframe
+    id="bgm"
+    width="0"
+    height="0"
+    src="https://www.youtube.com/embed/kek3bM7yswQ?autoplay=1&loop=1&playlist=kek3bM7yswQ"
+    frameborder="0"
+    allow="autoplay"
+    allowfullscreen>
+  </iframe>
 
-<div id="tapHint">点一下画面，音乐就开始啦 🎵</div>
+  <div id="tapHint">点一下画面，音乐就开始啦 🎵</div>
 
-<h1>叮！给你的一封小情书 💌</h1>
+  <h1>叮！给你的一封小情书 💌</h1>
 
-<img src="love.jpg" alt="我们的照片">
+  <img src="love.jpg" alt="我们的照片">
 
-<p id="love-days" style="font-size: 20px; color: deeppink; margin-top: 10px;">
-  ❤️ 我们相爱的第 <span id="daysCount"></span> 天！
-</p>
+  <p id="love-days" style="font-size: 20px; color: deeppink; margin-top: 10px;">
+    ❤️ 我们相爱的第 <span id="daysCount"></span> 天！
+  </p>
 
-<script>
-  const startDate = new Date("2025-03-16");
-  function updateLoveDays() {
-    const today = new Date();
-    const diffTime = today - startDate;
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    document.getElementById("daysCount").textContent = diffDays;
-  }
-  updateLoveDays();
-</script>
+  <p>见不到的日子都想把存满满的爱留在下次给你，爱你哟！</p>
 
-<p>见不到的日子都想把存满满的爱留在下次给你，爱你哟！</p>
+  <div class="btn-group">
+    <button id="yesBtn">很想哟~ 💗</button>
+    <button id="noBtn">不想lorrr 🙃</button>
+  </div>
 
-<div class="btn-group">
-  <button id="yesBtn">很想哟~ 💗</button>
-  <button id="noBtn">不想lorrr 🙃</button>
-</div>
+  <footer>Created by Nicole ✨</footer>
 
-<footer>Created by Nicole ✨</footer>
-
-<script>
-  const yesBtn = document.getElementById('yesBtn');
-  const noBtn = document.getElementById('noBtn');
-  const tapHint = document.getElementById('tapHint');
-  let hasGrown = false;
-  let currentScale = 1;
-
-  yesBtn.addEventListener('click', () => {
-    for (let i = 0; i < 30; i++) {
-      const heart = document.createElement('div');
-      heart.classList.add('heart');
-      heart.style.left = Math.random() * window.innerWidth + 'px';
-      heart.style.top = Math.random() * window.innerHeight + 'px';
-      heart.style.background = randomHeartColor();
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 3000);
+  <script>
+    // 设置纪念日
+    const startDate = new Date("2025-03-16");
+    function updateLoveDays() {
+      const today = new Date();
+      const diffTime = today - startDate;
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      document.getElementById("daysCount").textContent = diffDays;
     }
-  });
+    updateLoveDays();
 
-  noBtn.addEventListener('click', () => {
-    if (!hasGrown) {
-      currentScale += 0.35;
-      yesBtn.style.transform = `scale(${currentScale})`;
-      hasGrown = true;
-    }
-  });
+    // 主要按钮功能
+    const yesBtn = document.getElementById('yesBtn');
+    const noBtn = document.getElementById('noBtn');
+    const tapHint = document.getElementById('tapHint');
 
-  function randomHeartColor() {
-    const colors = ['#e91e63', '#f06292', '#f8bbd0', '#ec407a', '#f50057'];
-    return colors[Math.floor(Math.random() * colors.length)];
-  }
+    let currentScale = 1; // 初始按钮大小
 
-  window.addEventListener('click', () => {
-    tapHint.style.display = 'none';
-  }, { once: true });
-</script>
-
-<!-- 漂落爱心动画 -->
-<script>
-  const heartFall = setInterval(() => {
-    const heart = document.createElement('div');
-    heart.className = 'heart';
-    heart.style.left = Math.random() * 100 + 'vw';
-    heart.style.animationDuration = 3 + Math.random() * 2 + 's';
-    document.body.appendChild(heart);
-    setTimeout(() => heart.remove(), 5000);
-  }, 300);
-
-  const style = document.createElement('style');
-  style.textContent = `
-    .heart {
-      width: 20px;
-      height: 20px;
-      position: fixed;
-      top: -30px;
-      font-size: 20px;
-      color: pink;
-      animation: fall linear;
-      z-index: 1000;
-    }
-    @keyframes fall {
-      to {
-        transform: translateY(100vh) rotate(360deg);
-        opacity: 0;
+    // 点击「很想哟~ 💗」按钮：生成爱心
+    yesBtn.addEventListener('click', () => {
+      for (let i = 0; i < 30; i++) {
+        const heart = document.createElement('div');
+        heart.classList.add('heart');
+        heart.style.left = Math.random() * window.innerWidth + 'px';
+        heart.style.top = Math.random() * window.innerHeight + 'px';
+        heart.style.background = randomHeartColor();
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 3000);
       }
+    });
+
+    // 点击「不想lorrr 🙃」按钮：「很想哟~ 💗」持续变大 1cm（scale约+0.38）
+    noBtn.addEventListener('click', () => {
+      const oneCmToScale = 0.38;
+      currentScale += oneCmToScale;
+      yesBtn.style.transform = `scale(${currentScale})`;
+      yesBtn.style.transition = 'transform 0.3s ease';
+    });
+
+    // 爱心颜色随机
+    function randomHeartColor() {
+      const colors = ['#e91e63', '#f06292', '#f8bbd0', '#ec407a', '#f50057'];
+      return colors[Math.floor(Math.random() * colors.length)];
     }
-  `;
-  document.head.appendChild(style);
-</script>
 
-<!-- 柔光滤镜 -->
-<style>
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    backdrop-filter: brightness(1.05);
-    pointer-events: none;
-    z-index: 0;
-  }
-</style>
+    // 点击任意处播放音乐
+    window.addEventListener('click', () => {
+      const bgm = document.getElementById('bgm');
+      if (bgm) {
+        bgm.play();
+      }
+      tapHint.style.display = 'none';
+    }, { once: true });
+  </script>
 
-<!-- 鼠标拖尾星星特效 -->
-<script>
-  document.addEventListener("mousemove", function(e) {
-    const star = document.createElement("div");
-    star.className = "star";
-    star.style.left = e.pageX + "px";
-    star.style.top = e.pageY + "px";
-    document.body.appendChild(star);
-    setTimeout(() => star.remove(), 1000);
-  });
+  <!-- 落下的心动画 -->
+  <script>
+    const heartFall = setInterval(() => {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = 3 + Math.random() * 2 + 's';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 5000);
+    }, 300);
 
-  const style2 = document.createElement("style");
-  style2.textContent = `
-    .star {
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: gold;
-      box-shadow: 0 0 10px gold, 0 0 20px pink;
-      animation: sparkle 1s linear;
-      z-index: 9999;
+    const style = document.createElement('style');
+    style.textContent = `
+      .heart {
+        width: 20px;
+        height: 20px;
+        position: fixed;
+        top: -30px;
+        font-size: 20px;
+        color: pink;
+        animation: fall linear;
+        z-index: 1000;
+      }
+      @keyframes fall {
+        to {
+          transform: translateY(100vh) rotate(360deg);
+          opacity: 0;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+
+  <!-- 柔光滤镜 -->
+  <style>
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      backdrop-filter: brightness(1.05);
       pointer-events: none;
+      z-index: 0;
     }
-    @keyframes sparkle {
-      0% { opacity: 1; transform: scale(1); }
-      100% { opacity: 0; transform: scale(2); }
-    }
-  `;
-  document.head.appendChild(style2);
-</script>
+  </style>
+
+  <!-- 鼠标拖尾星星特效 -->
+  <script>
+    document.addEventListener("mousemove", function(e) {
+      const star = document.createElement("div");
+      star.className = "star";
+      star.style.left = e.pageX + "px";
+      star.style.top = e.pageY + "px";
+      document.body.appendChild(star);
+      setTimeout(() => star.remove(), 1000);
+    });
+
+    const style2 = document.createElement("style");
+    style2.textContent = `
+      .star {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: gold;
+        box-shadow: 0 0 10px gold, 0 0 20px pink;
+        animation: sparkle 1s linear;
+        z-index: 9999;
+        pointer-events: none;
+      }
+      @keyframes sparkle {
+        0% { opacity: 1; transform: scale(1); }
+        100% { opacity: 0; transform: scale(2); }
+      }
+    `;
+    document.head.appendChild(style2);
+  </script>
 
 </body>
 </html>
+
